@@ -13,5 +13,14 @@ model Employee {
   id        Int      @default(autoincrement()) @id
   name     String
   email    String
+  password String
   @@unique([email])
+}
+model Student {
+  id        Int      @default(autoincrement()) @id
+  name      String
+  email     String
+  password  String
+  studentCode String
+  @@unique([email, studentCode])
 }
