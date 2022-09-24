@@ -10,31 +10,133 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Employee {
-  id              Int      @id @default(autoincrement())
+model Faculty {
+  id              Int        @id @default(autoincrement())
   name            String
-  email           String   @unique
-  password        String
-  createdDatetime DateTime @default(now())
-  updatedDatetime DateTime @default(now()) @updatedAt
+  createdDatetime DateTime   @default(now())
+  updatedDatetime DateTime   @default(now()) @updatedAt
+  employees       Employee[]
+}
+
+model Department {
+  id              Int        @id @default(autoincrement())
+  name            String
+  createdDatetime DateTime   @default(now())
+  updatedDatetime DateTime   @default(now()) @updatedAt
+  employees       Employee[]
+}
+
+model Employee {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  email             String              @unique
+  employeeCode      String              @unique
+  dob               Boolean?
+  phoneNumber       String?
+  password          String
+  isActive          Boolean             @default(false)
+  facultyId         Int
+  faculty           Faculty             @relation(fields: [facultyId], references: [id])
+  departmentId      Int
+  department        Department          @relation(fields: [departmentId], references: [id])
+  createdDatetime   DateTime            @default(now())
+  updatedDatetime   DateTime            @default(now()) @updatedAt
+  positionEmployees Position_Employee[]
 }
 
 model Major {
-  id              Int       @id @default(autoincrement())
-  name            String
-  createdDatetime DateTime  @default(now())
-  updatedDatetime DateTime  @default(now()) @updatedAt
-  students        Student[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  createdDatetime   DateTime           @default(now())
+  updatedDatetime   DateTime           @default(now()) @updatedAt
+  students          Student[]
+  educationPrograms EducationProgram[]
 }
 
 model Student {
   id              Int      @id @default(autoincrement())
   name            String
+  dob             Boolean?
+  phoneNumber     String?
   email           String   @unique
   password        String
   studentCode     String   @unique
   majorId         Int
   major           Major    @relation(fields: [majorId], references: [id])
+  isGraduate      Boolean  @default(false)
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+  scores          Score[]
+}
+
+model Position {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  createdDatetime   DateTime            @default(now())
+  updatedDatetime   DateTime            @default(now()) @updatedAt
+  positionEmployees Position_Employee[]
+}
+
+model Position_Employee {
+  id              Int      @id @default(autoincrement())
+  employeeId      Int
+  employee        Employee @relation(fields: [employeeId], references: [id])
+  positionId      Int
+  position        Position @relation(fields: [positionId], references: [id])
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+}
+
+model Subject {
+  id                        Int              @id @default(autoincrement())
+  name                      String
+  numberOfCredits           Int
+  numberPrerequisiteCredits Int
+  screatedDatetime          DateTime         @default(now())
+  prerequisiteSubjects      Subject[]        @relation("SubjectPrerequisiteSubjecs")
+  subjectsRelations         Subject[]        @relation("SubjectPrerequisiteSubjecs")
+  createdDatetime           DateTime         @default(now())
+  updatedDatetime           DateTime         @default(now()) @updatedAt
+  knowledgeBlocks           KnowledgeBlock[]
+  scores                    Score[]
+}
+
+model EducationProgram {
+  id              Int              @id @default(autoincrement())
+  lock            Int
+  majorId         Int
+  major           Major            @relation(fields: [majorId], references: [id])
+  createdDatetime DateTime         @default(now())
+  updatedDatetime DateTime         @default(now()) @updatedAt
+  knowledgeBlocks KnowledgeBlock[]
+}
+
+model KnowledgeBlock {
+  id                 Int              @id @default(autoincrement())
+  subjectId          Int
+  subject            Subject          @relation(fields: [subjectId], references: [id])
+  educationProgramId Int
+  educationProgram   EducationProgram @relation(fields: [educationProgramId], references: [id])
+  createdDatetime    DateTime         @default(now())
+  updatedDatetime    DateTime         @default(now()) @updatedAt
+}
+
+model Score {
+  id              Int      @id @default(autoincrement())
+  studentId       Int
+  student         Student  @relation(fields: [studentId], references: [id])
+  subjectId       Int
+  subject         Subject  @relation(fields: [subjectId], references: [id])
+  number          Int
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+}
+
+model Semester {
+  id              Int      @id @default(autoincrement())
+  name            String
+  group           String
+  schoolYear      String
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
 }
