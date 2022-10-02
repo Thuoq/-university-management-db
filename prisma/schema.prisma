@@ -27,57 +27,60 @@ model Department {
 }
 
 model Employee {
-  id                Int                 @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   name              String
-  email             String              @unique
-  employeeCode      String              @unique
+  email             String             @unique
+  employeeCode      String             @unique
   dob               Boolean?
   phoneNumber       String?
   password          String
-  isActive          Boolean             @default(false)
+  isActive          Boolean            @default(false)
   facultyId         Int
-  faculty           Faculty             @relation(fields: [facultyId], references: [id])
+  faculty           Faculty            @relation(fields: [facultyId], references: [id])
   departmentId      Int
-  department        Department          @relation(fields: [departmentId], references: [id])
-  createdDatetime   DateTime            @default(now())
-  updatedDatetime   DateTime            @default(now()) @updatedAt
-  positionEmployees Position_Employee[]
+  department        Department         @relation(fields: [departmentId], references: [id])
+  createdDatetime   DateTime           @default(now())
+  updatedDatetime   DateTime           @default(now()) @updatedAt
+  positionEmployees PositionEmployee[]
+  SchoolSchedule    SchoolSchedule[]
 }
 
 model Major {
+  id              Int              @id @default(autoincrement())
+  name            String
+  createdDatetime DateTime         @default(now())
+  updatedDatetime DateTime         @default(now()) @updatedAt
+  students        Student[]
+  TrainingProgram TrainingProgram?
+}
+
+model Student {
+  id              Int               @id @default(autoincrement())
+  name            String
+  dob             Boolean?
+  phoneNumber     String?
+  email           String            @unique
+  password        String
+  studentCode     String            @unique
+  majorId         Int
+  className       String?
+  major           Major             @relation(fields: [majorId], references: [id])
+  isGraduate      Boolean           @default(false)
+  createdDatetime DateTime          @default(now())
+  updatedDatetime DateTime          @default(now()) @updatedAt
+  scores          Score[]
+  RegisterSubject RegisterSubject[]
+}
+
+model Position {
   id                Int                @id @default(autoincrement())
   name              String
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
-  students          Student[]
-  educationPrograms EducationProgram[]
+  positionEmployees PositionEmployee[]
 }
 
-model Student {
-  id              Int      @id @default(autoincrement())
-  name            String
-  dob             Boolean?
-  phoneNumber     String?
-  email           String   @unique
-  password        String
-  studentCode     String   @unique
-  majorId         Int
-  major           Major    @relation(fields: [majorId], references: [id])
-  isGraduate      Boolean  @default(false)
-  createdDatetime DateTime @default(now())
-  updatedDatetime DateTime @default(now()) @updatedAt
-  scores          Score[]
-}
-
-model Position {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  createdDatetime   DateTime            @default(now())
-  updatedDatetime   DateTime            @default(now()) @updatedAt
-  positionEmployees Position_Employee[]
-}
-
-model Position_Employee {
+model PositionEmployee {
   id              Int      @id @default(autoincrement())
   employeeId      Int
   employee        Employee @relation(fields: [employeeId], references: [id])
@@ -88,37 +91,20 @@ model Position_Employee {
 }
 
 model Subject {
-  id                        Int              @id @default(autoincrement())
-  name                      String
-  numberOfCredits           Int
-  numberPrerequisiteCredits Int
-  screatedDatetime          DateTime         @default(now())
-  prerequisiteSubjects      Subject[]        @relation("SubjectPrerequisiteSubjecs")
-  subjectsRelations         Subject[]        @relation("SubjectPrerequisiteSubjecs")
-  createdDatetime           DateTime         @default(now())
-  updatedDatetime           DateTime         @default(now()) @updatedAt
-  knowledgeBlocks           KnowledgeBlock[]
-  scores                    Score[]
-}
-
-model EducationProgram {
-  id              Int              @id @default(autoincrement())
-  lock            Int
-  majorId         Int
-  major           Major            @relation(fields: [majorId], references: [id])
-  createdDatetime DateTime         @default(now())
-  updatedDatetime DateTime         @default(now()) @updatedAt
-  knowledgeBlocks KnowledgeBlock[]
-}
-
-model KnowledgeBlock {
-  id                 Int              @id @default(autoincrement())
-  subjectId          Int
-  subject            Subject          @relation(fields: [subjectId], references: [id])
-  educationProgramId Int
-  educationProgram   EducationProgram @relation(fields: [educationProgramId], references: [id])
-  createdDatetime    DateTime         @default(now())
-  updatedDatetime    DateTime         @default(now()) @updatedAt
+  id                         Int                      @id @default(autoincrement())
+  name                       String
+  numberOfCredits            Int
+  numberPrerequisiteCredits  Int
+  numberOfTeachingHours      Int
+  numberOfCreditsRequirement Int
+  prerequisiteSubjects       Subject[]                @relation("SubjectPrerequisiteSubjecs")
+  subjectsRelations          Subject[]                @relation("SubjectPrerequisiteSubjecs")
+  createdDatetime            DateTime                 @default(now())
+  updatedDatetime            DateTime                 @default(now()) @updatedAt
+  scores                     Score[]
+  trainingProgramContents    TrainingProgramContent[]
+  SchoolSchedule             SchoolSchedule[]
+  RegisterSubject            RegisterSubject[]
 }
 
 model Score {
@@ -128,15 +114,84 @@ model Score {
   subjectId       Int
   subject         Subject  @relation(fields: [subjectId], references: [id])
   number          Int
+  status          Int      @default(1)
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
 }
 
 model Semester {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   name            String
   group           String
   schoolYear      String
+  createdDatetime DateTime         @default(now())
+  updatedDatetime DateTime         @default(now()) @updatedAt
+  SchoolSchedule  SchoolSchedule?
+  RegisterSubject RegisterSubject?
+}
+
+model AcademicYear {
+  id              Int               @id @default(autoincrement())
+  name            String
+  year            Int
+  createdDatetime DateTime          @default(now())
+  updatedDatetime DateTime          @default(now()) @updatedAt
+  TrainingProgram TrainingProgram[]
+}
+
+model KnowedgeBlock {
+  id              Int      @id @default(autoincrement())
+  name            String
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+}
+
+model TrainingProgram {
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  marjorId               Int                      @unique
+  marjor                 Major                    @relation(fields: [marjorId], references: [id])
+  academicYearId         Int
+  academicYear           AcademicYear             @relation(fields: [academicYearId], references: [id])
+  createdDatetime        DateTime                 @default(now())
+  updatedDatetime        DateTime                 @default(now()) @updatedAt
+  TrainingProgramContent TrainingProgramContent[]
+}
+
+model TrainingProgramContent {
+  id                Int             @id @default(autoincrement())
+  subjectId         Int
+  subject           Subject         @relation(fields: [subjectId], references: [id])
+  trainingProgramId Int
+  trainingProgram   TrainingProgram @relation(fields: [trainingProgramId], references: [id])
+  createdDatetime   DateTime        @default(now())
+  updatedDatetime   DateTime        @default(now()) @updatedAt
+}
+
+model SchoolSchedule {
+  id              Int      @id @default(autoincrement())
+  employeeId      Int
+  employee        Employee @relation(fields: [employeeId], references: [id])
+  subjectId       Int
+  subject         Subject  @relation(fields: [subjectId], references: [id])
+  className       String
+  semesterId      Int      @unique
+  semester        Semester @relation(fields: [semesterId], references: [id])
+  numberOfCredits Int
+  room            String
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+}
+
+model RegisterSubject {
+  id         Int      @id @default(autoincrement())
+  studentId  Int
+  student    Student  @relation(fields: [studentId], references: [id])
+  subjectId  Int
+  subject    Subject  @relation(fields: [subjectId], references: [id])
+  semesterId Int      @unique
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
 }
