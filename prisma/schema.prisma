@@ -42,7 +42,7 @@ model Employee {
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
   positionEmployees PositionEmployee[]
-  SchoolSchedule    SchoolSchedule[]
+  SchoolSchedules   SchoolSchedule[]
 }
 
 model Major {
@@ -55,21 +55,21 @@ model Major {
 }
 
 model Student {
-  id              Int               @id @default(autoincrement())
-  name            String
-  dob             Boolean?
-  phoneNumber     String?
-  email           String            @unique
-  password        String
-  studentCode     String            @unique
-  majorId         Int
-  className       String?
-  major           Major             @relation(fields: [majorId], references: [id])
-  isGraduate      Boolean           @default(false)
-  createdDatetime DateTime          @default(now())
-  updatedDatetime DateTime          @default(now()) @updatedAt
-  scores          Score[]
-  RegisterSubject RegisterSubject[]
+  id               Int               @id @default(autoincrement())
+  name             String
+  dob              Boolean?
+  phoneNumber      String?
+  email            String            @unique
+  password         String
+  studentCode      String            @unique
+  majorId          Int
+  className        String?
+  major            Major             @relation(fields: [majorId], references: [id])
+  isGraduate       Boolean           @default(false)
+  createdDatetime  DateTime          @default(now())
+  updatedDatetime  DateTime          @default(now()) @updatedAt
+  scores           Score[]
+  RegisterSubjects RegisterSubject[]
 }
 
 model Position {
@@ -103,8 +103,8 @@ model Subject {
   updatedDatetime            DateTime                 @default(now()) @updatedAt
   scores                     Score[]
   trainingProgramContents    TrainingProgramContent[]
-  SchoolSchedule             SchoolSchedule[]
-  RegisterSubject            RegisterSubject[]
+  SchoolSchedules            SchoolSchedule[]
+  RegisterSubjects           RegisterSubject[]
 }
 
 model Score {
@@ -131,12 +131,12 @@ model Semester {
 }
 
 model AcademicYear {
-  id              Int               @id @default(autoincrement())
-  name            String
-  year            Int
-  createdDatetime DateTime          @default(now())
-  updatedDatetime DateTime          @default(now()) @updatedAt
-  TrainingProgram TrainingProgram[]
+  id               Int               @id @default(autoincrement())
+  name             String
+  year             Int
+  createdDatetime  DateTime          @default(now())
+  updatedDatetime  DateTime          @default(now()) @updatedAt
+  TrainingPrograms TrainingProgram[]
 }
 
 model KnowedgeBlock {
@@ -147,15 +147,15 @@ model KnowedgeBlock {
 }
 
 model TrainingProgram {
-  id                     Int                      @id @default(autoincrement())
-  name                   String
-  marjorId               Int                      @unique
-  marjor                 Major                    @relation(fields: [marjorId], references: [id])
-  academicYearId         Int
-  academicYear           AcademicYear             @relation(fields: [academicYearId], references: [id])
-  createdDatetime        DateTime                 @default(now())
-  updatedDatetime        DateTime                 @default(now()) @updatedAt
-  TrainingProgramContent TrainingProgramContent[]
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  marjorId                Int                      @unique
+  marjor                  Major                    @relation(fields: [marjorId], references: [id])
+  academicYearId          Int
+  academicYear            AcademicYear             @relation(fields: [academicYearId], references: [id])
+  createdDatetime         DateTime                 @default(now())
+  updatedDatetime         DateTime                 @default(now()) @updatedAt
+  TrainingProgramContents TrainingProgramContent[]
 }
 
 model TrainingProgramContent {
