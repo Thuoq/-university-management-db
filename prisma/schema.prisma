@@ -10,14 +10,29 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Bộ Môn
+model Section {
+  id              Int       @id @default(autoincrement())
+  name            String
+  createdDatetime DateTime  @default(now())
+  updatedDatetime DateTime  @default(now()) @updatedAt
+  majors          Major[]
+  faculties       Faculty[]
+}
+
+// Khoa
 model Faculty {
   id              Int        @id @default(autoincrement())
   name            String
   createdDatetime DateTime   @default(now())
   updatedDatetime DateTime   @default(now()) @updatedAt
+  sectionId       Int
+  section         Section    @relation(fields: [sectionId], references: [id])
   employees       Employee[]
+  majors          Major[]
 }
 
+// Phòng ban
 model Department {
   id              Int        @id @default(autoincrement())
   name            String
@@ -42,18 +57,25 @@ model Employee {
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
   positionEmployees PositionEmployee[]
-  SchoolSchedules   SchoolSchedule[]
+  schoolSchedules   SchoolSchedule[]
 }
 
+// Ngành
 model Major {
-  id              Int              @id @default(autoincrement())
-  name            String
-  createdDatetime DateTime         @default(now())
-  updatedDatetime DateTime         @default(now()) @updatedAt
-  students        Student[]
-  TrainingProgram TrainingProgram?
+  id               Int               @id @default(autoincrement())
+  name             String
+  code             String            @unique
+  createdDatetime  DateTime          @default(now())
+  updatedDatetime  DateTime          @default(now()) @updatedAt
+  facultyId        Int
+  faculty          Faculty           @relation(fields: [facultyId], references: [id])
+  sectionId        Int
+  section          Section           @relation(fields: [sectionId], references: [id])
+  students         Student[]
+  trainingPrograms TrainingProgram[]
 }
 
+// Sinh viên
 model Student {
   id               Int               @id @default(autoincrement())
   name             String
@@ -69,9 +91,10 @@ model Student {
   createdDatetime  DateTime          @default(now())
   updatedDatetime  DateTime          @default(now()) @updatedAt
   scores           Score[]
-  RegisterSubjects RegisterSubject[]
+  registerSubjects RegisterSubject[]
 }
 
+// Chức vụ
 model Position {
   id                Int                @id @default(autoincrement())
   name              String
@@ -90,9 +113,11 @@ model PositionEmployee {
   updatedDatetime DateTime @default(now()) @updatedAt
 }
 
+// Học Phần
 model Subject {
   id                         Int                      @id @default(autoincrement())
   name                       String
+  code                       String                   @unique
   numberOfCredits            Int
   numberPrerequisiteCredits  Int
   numberOfTeachingHours      Int
@@ -103,10 +128,11 @@ model Subject {
   updatedDatetime            DateTime                 @default(now()) @updatedAt
   scores                     Score[]
   trainingProgramContents    TrainingProgramContent[]
-  SchoolSchedules            SchoolSchedule[]
-  RegisterSubjects           RegisterSubject[]
+  schoolSchedules            SchoolSchedule[]
+  registerSubjects           RegisterSubject[]
 }
 
+// Điểm
 model Score {
   id              Int      @id @default(autoincrement())
   studentId       Int
@@ -119,6 +145,7 @@ model Score {
   updatedDatetime DateTime @default(now()) @updatedAt
 }
 
+// Học kỳ
 model Semester {
   id              Int              @id @default(autoincrement())
   name            String
@@ -126,19 +153,21 @@ model Semester {
   schoolYear      String
   createdDatetime DateTime         @default(now())
   updatedDatetime DateTime         @default(now()) @updatedAt
-  SchoolSchedule  SchoolSchedule?
-  RegisterSubject RegisterSubject?
+  schoolSchedule  SchoolSchedule?
+  registerSubject RegisterSubject?
 }
 
+// Năm học
 model AcademicYear {
   id               Int               @id @default(autoincrement())
   name             String
   year             Int
   createdDatetime  DateTime          @default(now())
   updatedDatetime  DateTime          @default(now()) @updatedAt
-  TrainingPrograms TrainingProgram[]
+  trainingPrograms TrainingProgram[]
 }
 
+// Khối kiến thức
 model KnowedgeBlock {
   id              Int      @id @default(autoincrement())
   name            String
@@ -146,18 +175,20 @@ model KnowedgeBlock {
   updatedDatetime DateTime @default(now()) @updatedAt
 }
 
+// Chương trình đào tạo
 model TrainingProgram {
   id                      Int                      @id @default(autoincrement())
   name                    String
-  marjorId                Int                      @unique
+  marjorId                Int
   marjor                  Major                    @relation(fields: [marjorId], references: [id])
   academicYearId          Int
   academicYear            AcademicYear             @relation(fields: [academicYearId], references: [id])
   createdDatetime         DateTime                 @default(now())
   updatedDatetime         DateTime                 @default(now()) @updatedAt
-  TrainingProgramContents TrainingProgramContent[]
+  trainingProgramContents TrainingProgramContent[]
 }
 
+// Nội dung chương trình đào tạo
 model TrainingProgramContent {
   id                Int             @id @default(autoincrement())
   subjectId         Int
@@ -168,6 +199,7 @@ model TrainingProgramContent {
   updatedDatetime   DateTime        @default(now()) @updatedAt
 }
 
+// Thời khoá biểu toàn trường
 model SchoolSchedule {
   id              Int      @id @default(autoincrement())
   employeeId      Int
@@ -183,6 +215,7 @@ model SchoolSchedule {
   updatedDatetime DateTime @default(now()) @updatedAt
 }
 
+// Đăng ký học
 model RegisterSubject {
   id         Int      @id @default(autoincrement())
   studentId  Int
