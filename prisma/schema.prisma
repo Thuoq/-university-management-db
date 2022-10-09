@@ -249,6 +249,7 @@ model RegisterSubject {
 model Resource {
   id   Int    @id @default(autoincrement())
   name String
+  code String @unique
 
   createdDatetime DateTime      @default(now())
   updatedDatetime DateTime      @default(now()) @updatedAt
@@ -259,7 +260,7 @@ model ResouceRole {
   id        Int      @id @default(autoincrement())
   roleId    Int
   role      Role     @relation(fields: [roleId], references: [id])
-  resouceId Int
+  resourceId Int
   resource  Resource @relation(fields: [resouceId], references: [id])
 
   canAdd          Boolean  @default(false)
