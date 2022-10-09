@@ -7,7 +7,7 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
 }
 
@@ -43,9 +43,9 @@ model Department {
 }
 
 model Role {
-  id   Int    @id @default(autoincrement())
-  name String
-  code String @unique
+  id          Int     @id @default(autoincrement())
+  name        String
+  code        String  @unique
   description String?
 
   createdDatetime DateTime      @default(now())
@@ -257,11 +257,11 @@ model Resource {
 }
 
 model ResouceRole {
-  id        Int      @id @default(autoincrement())
-  roleId    Int
-  role      Role     @relation(fields: [roleId], references: [id])
+  id         Int      @id @default(autoincrement())
+  roleId     Int
+  role       Role     @relation(fields: [roleId], references: [id])
   resourceId Int
-  resource  Resource @relation(fields: [resouceId], references: [id])
+  resource   Resource @relation(fields: [resourceId], references: [id])
 
   canAdd          Boolean  @default(false)
   canView         Boolean  @default(false)
