@@ -41,6 +41,17 @@ model Department {
   employees       Employee[]
 }
 
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String @unique
+
+  createdDatetime DateTime      @default(now())
+  updatedDatetime DateTime      @default(now()) @updatedAt
+  resouceRoles    ResouceRole[]
+  employees       Employee[]
+}
+
 model Employee {
   id                Int                @id @default(autoincrement())
   name              String
@@ -54,6 +65,8 @@ model Employee {
   faculty           Faculty            @relation(fields: [facultyId], references: [id])
   departmentId      Int
   department        Department         @relation(fields: [departmentId], references: [id])
+  roleId            Int
+  role              Role               @relation(fields: [roleId], references: [id])
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
   positionEmployees PositionEmployee[]
@@ -225,6 +238,33 @@ model RegisterSubject {
   semesterId Int      @unique
   semester   Semester @relation(fields: [semesterId], references: [id])
 
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
+}
+
+// GroupRoles
+
+model Resource {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  createdDatetime DateTime      @default(now())
+  updatedDatetime DateTime      @default(now()) @updatedAt
+  resouceRoles    ResouceRole[]
+}
+
+model ResouceRole {
+  id        Int      @id @default(autoincrement())
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  resouceId Int
+  resource  Resource @relation(fields: [resouceId], references: [id])
+
+  canAdd          Boolean  @default(false)
+  canView         Boolean  @default(false)
+  canDelete       Boolean  @default(false)
+  canEdit         Boolean  @default(false)
+  canExport       Boolean  @default(false)
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
 }
