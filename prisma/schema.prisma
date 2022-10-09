@@ -265,6 +265,8 @@ model ResouceRole {
   canDelete       Boolean  @default(false)
   canEdit         Boolean  @default(false)
   canExport       Boolean  @default(false)
+  canImport       Boolean  @default(false)
+  canApprove      Boolean  @default(false)
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
 }
