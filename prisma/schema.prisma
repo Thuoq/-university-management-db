@@ -8,6 +8,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 // Bộ Môn
@@ -45,6 +46,7 @@ model Role {
   id   Int    @id @default(autoincrement())
   name String
   code String @unique
+  description String?
 
   createdDatetime DateTime      @default(now())
   updatedDatetime DateTime      @default(now()) @updatedAt
