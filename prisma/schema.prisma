@@ -15,6 +15,7 @@ generator client {
 model Section {
   id              Int       @id @default(autoincrement())
   name            String
+  code            String    @unique
   createdDatetime DateTime  @default(now())
   updatedDatetime DateTime  @default(now()) @updatedAt
   majors          Major[]
@@ -113,6 +114,7 @@ model Student {
 model Position {
   id                Int                @id @default(autoincrement())
   name              String
+  code              String             @unique
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
   positionEmployees PositionEmployee[]
