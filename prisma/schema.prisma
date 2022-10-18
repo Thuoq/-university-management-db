@@ -67,8 +67,8 @@ model Employee {
   phoneNumber       String?
   password          String
   isActive          Boolean            @default(false)
-  facultyId         Int
-  faculty           Faculty            @relation(fields: [facultyId], references: [id])
+  facultyId         Int?
+  faculty           Faculty?           @relation(fields: [facultyId], references: [id])
   sectionId         Int
   section           Section            @relation(fields: [sectionId], references: [id])
   roleId            Int
