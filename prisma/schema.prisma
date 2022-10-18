@@ -29,8 +29,8 @@ model Section {
   id              Int      @id @default(autoincrement())
   name            String
   code            String   @unique
-  faculityId      Int
-  faculity        Faculty  @relation(fields: [faculityId], references: [id])
+  facultyId       Int
+  faculty         Faculty  @relation(fields: [facultyId], references: [id])
   createdDatetime DateTime @default(now())
   updatedDatetime DateTime @default(now()) @updatedAt
   majors          Major[]
