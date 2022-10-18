@@ -6,31 +6,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Khoa => 1 n -> Bộ Môn -> 1 -> n
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
-}
-
-// Bộ Môn
-model Section {
-  id              Int       @id @default(autoincrement())
-  name            String
-  code            String    @unique
-  createdDatetime DateTime  @default(now())
-  updatedDatetime DateTime  @default(now()) @updatedAt
-  majors          Major[]
-  faculties       Faculty[]
 }
 
 // Khoa
 model Faculty {
   id              Int        @id @default(autoincrement())
   name            String
+  code            String     @unique
   createdDatetime DateTime   @default(now())
   updatedDatetime DateTime   @default(now()) @updatedAt
-  sectionId       Int
-  section         Section    @relation(fields: [sectionId], references: [id])
   employees       Employee[]
+  majors          Major[]
+  sections        Section[]
+}
+
+// Bộ Môn
+model Section {
+  id              Int      @id @default(autoincrement())
+  name            String
+  code            String   @unique
+  faculityId      Int
+  faculity        Faculty  @relation(fields: [faculityId], references: [id])
+  createdDatetime DateTime @default(now())
+  updatedDatetime DateTime @default(now()) @updatedAt
   majors          Major[]
 }
 
@@ -139,6 +141,7 @@ model Subject {
   numberPrerequisiteCredits  Int
   numberOfTeachingHours      Int
   numberOfCreditsRequirement Int
+  coefficient                Int
   prerequisiteSubjects       Subject[]                @relation("SubjectPrerequisiteSubjecs")
   subjectsRelations          Subject[]                @relation("SubjectPrerequisiteSubjecs")
   createdDatetime            DateTime                 @default(now())
@@ -186,10 +189,13 @@ model AcademicYear {
 
 // Khối kiến thức
 model KnowedgeBlock {
-  id              Int      @id @default(autoincrement())
-  name            String
-  createdDatetime DateTime @default(now())
-  updatedDatetime DateTime @default(now()) @updatedAt
+  id                     Int             @id @default(autoincrement())
+  name                   String
+  knowedgeBlockId        Int?
+  knowedgeBlockChildrent KnowedgeBlock?  @relation("KnowedgeBlock", fields: [knowedgeBlockId], references: [id])
+  knowedgeBlocks         KnowedgeBlock[] @relation("KnowedgeBlock")
+  createdDatetime        DateTime        @default(now())
+  updatedDatetime        DateTime        @default(now()) @updatedAt
 }
 
 // Chương trình đào tạo
