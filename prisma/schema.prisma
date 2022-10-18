@@ -26,14 +26,15 @@ model Faculty {
 
 // Bộ Môn
 model Section {
-  id              Int      @id @default(autoincrement())
+  id              Int        @id @default(autoincrement())
   name            String
-  code            String   @unique
+  code            String     @unique
   facultyId       Int
-  faculty         Faculty  @relation(fields: [facultyId], references: [id])
-  createdDatetime DateTime @default(now())
-  updatedDatetime DateTime @default(now()) @updatedAt
+  faculty         Faculty    @relation(fields: [facultyId], references: [id])
+  createdDatetime DateTime   @default(now())
+  updatedDatetime DateTime   @default(now()) @updatedAt
   majors          Major[]
+  employees       Employee[]
 }
 
 // Phòng ban
@@ -68,14 +69,16 @@ model Employee {
   isActive          Boolean            @default(false)
   facultyId         Int
   faculty           Faculty            @relation(fields: [facultyId], references: [id])
-  departmentId      Int
-  department        Department         @relation(fields: [departmentId], references: [id])
+  sectionId         Int
+  section           Section            @relation(fields: [sectionId], references: [id])
   roleId            Int
   role              Role               @relation(fields: [roleId], references: [id])
   createdDatetime   DateTime           @default(now())
   updatedDatetime   DateTime           @default(now()) @updatedAt
   positionEmployees PositionEmployee[]
   schoolSchedules   SchoolSchedule[]
+  department        Department?        @relation(fields: [departmentId], references: [id])
+  departmentId      Int?
 }
 
 // Ngành
