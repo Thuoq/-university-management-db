@@ -184,6 +184,7 @@ model Semester {
 model AcademicYear {
   id               Int               @id @default(autoincrement())
   name             String
+  code             String            @unique
   startYear        DateTime?
   finishYear       DateTime?
   createdDatetime  DateTime          @default(now())
