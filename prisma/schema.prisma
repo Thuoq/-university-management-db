@@ -69,8 +69,8 @@ model Employee {
   isActive          Boolean            @default(false)
   facultyId         Int?
   faculty           Faculty?           @relation(fields: [facultyId], references: [id])
-  sectionId         Int
-  section           Section            @relation(fields: [sectionId], references: [id])
+  sectionId         Int?
+  section           Section?           @relation(fields: [sectionId], references: [id])
   roleId            Int
   role              Role               @relation(fields: [roleId], references: [id])
   createdDatetime   DateTime           @default(now())
@@ -184,7 +184,8 @@ model Semester {
 model AcademicYear {
   id               Int               @id @default(autoincrement())
   name             String
-  year             Int
+  startYear        DateTime?
+  finishYear       DateTime?
   createdDatetime  DateTime          @default(now())
   updatedDatetime  DateTime          @default(now()) @updatedAt
   trainingPrograms TrainingProgram[]
