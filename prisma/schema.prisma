@@ -193,14 +193,14 @@ model AcademicYear {
 }
 
 // Khối kiến thức
-model KnowedgeBlock {
-  id                     Int             @id @default(autoincrement())
+model KnowledgeBlock {
+  id                     Int                      @id @default(autoincrement())
   name                   String
-  knowedgeBlockId        Int?
-  knowedgeBlockChildrent KnowedgeBlock?  @relation("KnowedgeBlock", fields: [knowedgeBlockId], references: [id])
-  knowedgeBlocks         KnowedgeBlock[] @relation("KnowedgeBlock")
-  createdDatetime        DateTime        @default(now())
-  updatedDatetime        DateTime        @default(now()) @updatedAt
+  knowledgeBlockChildren KnowledgeBlock[]         @relation("KnowledgeBlock")
+  knowledgeBlocks        KnowledgeBlock[]         @relation("KnowledgeBlock")
+  createdDatetime        DateTime                 @default(now())
+  updatedDatetime        DateTime                 @default(now()) @updatedAt
+  trainingProgramContents TrainingProgramContent[]
 }
 
 // Chương trình đào tạo
@@ -221,6 +221,8 @@ model TrainingProgramContent {
   id                Int             @id @default(autoincrement())
   subjectId         Int
   subject           Subject         @relation(fields: [subjectId], references: [id])
+  knowledgeBlockId  Int
+  knowledgeBlock    KnowledgeBlock  @relation(fields: [knowledgeBlockId], references: [id])
   trainingProgramId Int
   trainingProgram   TrainingProgram @relation(fields: [trainingProgramId], references: [id])
   createdDatetime   DateTime        @default(now())
