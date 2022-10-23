@@ -140,10 +140,9 @@ model Subject {
   id                         Int                      @id @default(autoincrement())
   name                       String
   code                       String                   @unique
-  numberOfCredits            Int
+  numberOfCredits            Int?
   numberPrerequisiteCredits  Int
   numberOfTeachingHours      Int
-  numberOfCreditsRequirement Int
   coefficient                Int
   prerequisiteSubjects       Subject[]                @relation("SubjectPrerequisiteSubjecs")
   subjectsRelations          Subject[]                @relation("SubjectPrerequisiteSubjecs")
