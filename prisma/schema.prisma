@@ -194,12 +194,13 @@ model AcademicYear {
 
 // Khối kiến thức
 model KnowledgeBlock {
-  id                     Int                      @id @default(autoincrement())
-  name                   String
-  knowledgeBlockChildren KnowledgeBlock[]         @relation("KnowledgeBlock")
-  knowledgeBlocks        KnowledgeBlock[]         @relation("KnowledgeBlock")
-  createdDatetime        DateTime                 @default(now())
-  updatedDatetime        DateTime                 @default(now()) @updatedAt
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  knowledgeParentId       Int?
+  knowledgeParent         KnowledgeBlock?          @relation("KnowledgeBlock", fields: [knowledgeParentId], references: [id])
+  knowledgeChildren       KnowledgeBlock[]         @relation("KnowledgeBlock")
+  createdDatetime         DateTime                 @default(now())
+  updatedDatetime         DateTime                 @default(now()) @updatedAt
   trainingProgramContents TrainingProgramContent[]
 }
 
