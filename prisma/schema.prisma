@@ -195,6 +195,7 @@ model AcademicYear {
 // Khối kiến thức
 model KnowledgeBlock {
   id                      Int                      @id @default(autoincrement())
+  code                    String                   @unique
   name                    String
   knowledgeParentId       Int?
   knowledgeParent         KnowledgeBlock?          @relation("KnowledgeBlock", fields: [knowledgeParentId], references: [id])
