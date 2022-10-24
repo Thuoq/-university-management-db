@@ -137,21 +137,21 @@ model PositionEmployee {
 
 // Học Phần
 model Subject {
-  id                         Int                      @id @default(autoincrement())
-  name                       String
-  code                       String                   @unique
-  numberOfCredits            Int?
-  numberPrerequisiteCredits  Int
-  numberOfTeachingHours      Int
-  coefficient                Int
-  prerequisiteSubjects       Subject[]                @relation("SubjectPrerequisiteSubjecs")
-  subjectsRelations          Subject[]                @relation("SubjectPrerequisiteSubjecs")
-  createdDatetime            DateTime                 @default(now())
-  updatedDatetime            DateTime                 @default(now()) @updatedAt
-  scores                     Score[]
-  trainingProgramContents    TrainingProgramContent[]
-  schoolSchedules            SchoolSchedule[]
-  registerSubjects           RegisterSubject[]
+  id                        Int                      @id @default(autoincrement())
+  name                      String
+  code                      String                   @unique
+  numberOfCredits           Int?
+  numberPrerequisiteCredits Int?
+  numberOfTeachingHours     Int
+  coefficient               Decimal
+  prerequisiteSubjects      Subject[]                @relation("SubjectPrerequisiteSubjecs")
+  subjectsRelations         Subject[]                @relation("SubjectPrerequisiteSubjecs")
+  createdDatetime           DateTime                 @default(now())
+  updatedDatetime           DateTime                 @default(now()) @updatedAt
+  scores                    Score[]
+  trainingProgramContents   TrainingProgramContent[]
+  schoolSchedules           SchoolSchedule[]
+  registerSubjects          RegisterSubject[]
 }
 
 // Điểm
