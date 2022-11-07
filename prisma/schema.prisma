@@ -208,6 +208,7 @@ model KnowledgeBlock {
 model TrainingProgram {
   id                      Int                      @id @default(autoincrement())
   name                    String
+  code                    String                   @unique
   marjorId                Int
   marjor                  Major                    @relation(fields: [marjorId], references: [id])
   academicYearId          Int
